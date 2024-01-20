@@ -16,7 +16,7 @@ val mcVersion = "1.19"
 val github = Properties().apply { load(FileInputStream(File("${System.getenv("USERPROFILE")}/.m2/", "github.properties"))) }
 
 group = "me.yoku"
-version = "1.0"
+version = "2.2"
 
 repositories {
 
@@ -59,7 +59,7 @@ publishing {
     repositories {
         maven {
             name = "GithubPackages"
-            url = uri("")
+            url = uri("https://maven.pkg.github.com/yoku0206/YokuData")
             credentials {
                 username = github["gpr.user"] as String? ?: System.getenv("GITHUB_ACTOR")
                 password = github["gpr.key"] as String? ?: System.getenv("GITHUB_TOKEN")
@@ -97,10 +97,10 @@ tasks {
 
     shadowJar {
 
-        minimize {
-            exclude(dependency("org.jetbrains.kotlin:kotlin-stdlib:1.8.0"))
-            exclude(dependency("org.jetbrains.kotlin:kotlin-reflect:1.8.0"))
-        }
+//        minimize {
+//            exclude(dependency("org.jetbrains.kotlin:kotlin-stdlib:1.8.0"))
+//            exclude(dependency("org.jetbrains.kotlin:kotlin-reflect:1.8.0"))
+//        }
 
         archiveBaseName.set("${project.name}-${project.version}")
         archiveClassifier.set("")
