@@ -40,7 +40,12 @@ class MongoControl(plugin: JavaPlugin, uri: String, database: String) {
 
     }
 
-    inline fun <reified T> getCollection(name: String, collection: MongoCollection<T>.() -> Unit): MongoCollection<T> { return this.database.getCollection(name, T::class.java).apply(collection) }
+    inline fun <reified T> getCollection(name: String, collection: (MongoCollection<T>) -> MongoCollection<T>): MongoCollection<T> {
 
-    inline fun <reified T> getCollection(name: String): MongoCollection<T> { return getCollection<T>(name) { } }
+        val mongoCollection = this.database.getCollection(name, T::class.java)
+
+        return collection.invoke(mongoCollection)
+    }
+
+    inline fun <reified T> getCollection(name: String): MongoCollection<T> { return getCollection<T>(name) { return it } }
 }
