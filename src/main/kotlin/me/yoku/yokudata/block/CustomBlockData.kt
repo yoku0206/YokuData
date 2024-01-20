@@ -13,6 +13,7 @@ import org.bukkit.util.BlockVector
 import java.util.*
 import java.util.AbstractMap.SimpleEntry
 
+@Suppress("SpellCheckingInspection")
 class CustomBlockData(block: Block, plugin: JavaPlugin) : PersistentDataContainer {
 
     private val container: PersistentDataContainer
@@ -44,7 +45,6 @@ class CustomBlockData(block: Block, plugin: JavaPlugin) : PersistentDataContaine
             PersistentDataType.FLOAT,
             PersistentDataType.INTEGER,
             PersistentDataType.SHORT,
-            PersistentDataType.BOOLEAN,
             PersistentDataType.BYTE_ARRAY,
             PersistentDataType.INTEGER_ARRAY,
             PersistentDataType.LONG_ARRAY,
@@ -53,7 +53,27 @@ class CustomBlockData(block: Block, plugin: JavaPlugin) : PersistentDataContaine
             PersistentDataType.TAG_CONTAINER_ARRAY
         )
 
-        private val PERSISTENCE_KEY = NamespacedKey.fromString("YokuData:BlockProtected")!!
+        private class DataType {
+
+            companion object {
+
+                val BOOLEAN = object : PersistentDataType<Byte, Boolean> {
+
+                    override fun getPrimitiveType() : Class<Byte> { return Byte::class.java }
+
+                    override fun getComplexType() : Class<Boolean> { return Boolean::class.java }
+
+                    override fun toPrimitive(complex: Boolean, ctx: PersistentDataAdapterContext) : Byte { return if (complex) 1.toByte() else 0.toByte() }
+
+                    override fun fromPrimitive(primitive: Byte, ctx: PersistentDataAdapterContext) : Boolean { return primitive == 1.toByte() }
+
+                }
+
+            }
+
+        }
+
+        private val PERSISTENCE_KEY = NamespacedKey.fromString("yokudata:protect")!!
 
         private val KEY_REGEX = Regex("^x(\\d+)y(-?\\d+)z(\\d+)$")
 
@@ -175,9 +195,9 @@ class CustomBlockData(block: Block, plugin: JavaPlugin) : PersistentDataContaine
         return chunkPDC.adapterContext.newPersistentDataContainer()
     }
 
-    fun isProtected() : Boolean { return has(PERSISTENCE_KEY, PersistentDataType.BOOLEAN) }
+    fun isProtected() : Boolean { return has(PERSISTENCE_KEY, DataType.BOOLEAN) }
 
-    fun setProtected(boolean: Boolean) { if (boolean) { set(PERSISTENCE_KEY, PersistentDataType.BOOLEAN, true) } else remove(PERSISTENCE_KEY) }
+    fun setProtected(boolean: Boolean) { if (boolean) { set(PERSISTENCE_KEY, DataType.BOOLEAN, true) } else remove(PERSISTENCE_KEY) }
 
     fun clear() {
 
@@ -237,4 +257,5 @@ class CustomBlockData(block: Block, plugin: JavaPlugin) : PersistentDataContaine
     override fun isEmpty() : Boolean { return this.container.isEmpty }
 
     override fun getAdapterContext() : PersistentDataAdapterContext { return this.container.adapterContext }
+
 }
