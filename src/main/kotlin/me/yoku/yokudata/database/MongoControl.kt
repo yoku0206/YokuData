@@ -10,7 +10,7 @@ import org.bukkit.plugin.java.JavaPlugin
 @Suppress("MemberVisibilityCanBePrivate")
 class MongoControl(plugin: JavaPlugin, uri: String, database: String) {
 
-    private lateinit var client: MongoClient
+    lateinit var client: MongoClient
     lateinit var database: MongoDatabase
 
     private var isInit = false
@@ -39,6 +39,8 @@ class MongoControl(plugin: JavaPlugin, uri: String, database: String) {
         }
 
     }
+
+    fun close() { if (isInit) this.client.close() }
 
     inline fun <reified T> getCollection(name: String, collection: (MongoCollection<T>) -> MongoCollection<T>): MongoCollection<T> {
 
