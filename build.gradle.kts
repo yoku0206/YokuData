@@ -16,7 +16,7 @@ val mcVersion = "1.19"
 val github = Properties().apply { load(FileInputStream(File("${System.getenv("USERPROFILE")}/.m2/", "github.properties"))) }
 
 group = "me.yoku"
-version = "2.4"
+version = "2.5"
 
 repositories {
 

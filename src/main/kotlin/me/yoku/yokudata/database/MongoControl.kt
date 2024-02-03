@@ -6,6 +6,8 @@ import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
+import java.util.logging.Level
+import java.util.logging.Logger
 
 @Suppress("MemberVisibilityCanBePrivate")
 class MongoControl(plugin: JavaPlugin, uri: String, database: String) {
@@ -16,6 +18,8 @@ class MongoControl(plugin: JavaPlugin, uri: String, database: String) {
     private var isInit = false
 
     init {
+
+        Logger.getLogger("org.mongodb.driver").level = Level.WARNING
 
         run {
 
