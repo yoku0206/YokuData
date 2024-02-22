@@ -6,8 +6,8 @@ import java.util.Properties
 plugins {
     idea
     java
-    kotlin("jvm") version "1.8.0"
-    id("com.github.johnrengelman.shadow") version "7.1.2"
+    kotlin("jvm") version "1.9.22"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
     id("kr.entree.spigradle") version "2.4.3"
     id("maven-publish")
 }
@@ -16,7 +16,7 @@ val mcVersion = "1.19"
 val github = Properties().apply { load(FileInputStream(File("${System.getenv("USERPROFILE")}/.m2/", "github.properties"))) }
 
 group = "me.yoku"
-version = "2.5"
+version = "3.0"
 
 repositories {
 
@@ -28,29 +28,33 @@ repositories {
 
 }
 
+val centralDependcies = listOf(
+    // Kotlin
+    "org.jetbrains.kotlin:kotlin-stdlib:1.9.22",
+    "org.jetbrains.kotlin:kotlin-reflect:1.9.22",
+    "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1",
+    "org.jetbrains.kotlinx:kotlinx-serialization-core:1.6.3",
+    // MongoDB
+    "org.mongodb:mongodb-driver-sync:4.11.1",
+    "org.mongodb:mongodb-driver-reactivestreams:4.11.1",
+    "org.mongodb:mongodb-driver-kotlin-coroutine:4.11.1",
+    "org.mongodb:bson-kotlinx:4.11.1",
+
+)
+
 dependencies {
 
-    implementation(kotlin("stdlib-jdk8"))
-    implementation(kotlin("reflect"))
     compileOnly(group = "org.spigotmc", name = "spigot-api", version = "1.19.4-R0.1-SNAPSHOT")
 
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.8.0")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.0")
-
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.2")
-    implementation("org.mongodb:mongodb-driver-sync:4.10.1")
-    implementation("org.mongodb:mongodb-driver-reactivestreams:4.10.1")
-    implementation("org.mongodb:mongodb-driver-kotlin-coroutine:4.10.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.5.1")
-    implementation("org.mongodb:bson-kotlinx:4.10.1")
+    centralDependcies.forEach { compileOnly(it) }
 
 }
 
 spigot {
 
     authors = listOf("Yoku")
-    excludeLibraries = listOf("*")
-    this.apiVersion = "1.13"
+    apiVersion = "1.13"
+    libraries = centralDependcies
 
 }
 
@@ -79,28 +83,29 @@ publishing {
 }
 
 java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(11))
-    }
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+
+    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+
+    withSourcesJar()
+}
+
+kotlin {
+
+    jvmToolchain(17)
+
 }
 
 tasks {
 
-    wrapper {
-        gradleVersion = "7.4.1"
-        distributionType = Wrapper.DistributionType.ALL
-    }
-
     compileKotlin {
-        kotlinOptions.jvmTarget = "11"
+
+        kotlinOptions.jvmTarget = "17"
+
     }
 
     shadowJar {
-
-//        minimize {
-//            exclude(dependency("org.jetbrains.kotlin:kotlin-stdlib:1.8.0"))
-//            exclude(dependency("org.jetbrains.kotlin:kotlin-reflect:1.8.0"))
-//        }
 
         archiveBaseName.set("${project.name}-${project.version}")
         archiveClassifier.set("")
