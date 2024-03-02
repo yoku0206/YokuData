@@ -16,7 +16,7 @@ val mcVersion = "1.19"
 val github = Properties().apply { load(FileInputStream(File("${System.getenv("USERPROFILE")}/.m2/", "github.properties"))) }
 
 group = "me.yoku"
-version = "3.0"
+version = "3.1"
 
 repositories {
 
@@ -33,13 +33,7 @@ val centralDependcies = listOf(
     "org.jetbrains.kotlin:kotlin-stdlib:1.9.22",
     "org.jetbrains.kotlin:kotlin-reflect:1.9.22",
     "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1",
-    "org.jetbrains.kotlinx:kotlinx-serialization-core:1.6.3",
-    // MongoDB
-    "org.mongodb:mongodb-driver-sync:4.11.1",
-    "org.mongodb:mongodb-driver-reactivestreams:4.11.1",
-    "org.mongodb:mongodb-driver-kotlin-coroutine:4.11.1",
-    "org.mongodb:bson-kotlinx:4.11.1",
-
+    "org.jetbrains.kotlinx:kotlinx-serialization-core:1.6.3"
 )
 
 dependencies {
@@ -47,6 +41,12 @@ dependencies {
     compileOnly(group = "org.spigotmc", name = "spigot-api", version = "1.19.4-R0.1-SNAPSHOT")
 
     centralDependcies.forEach { compileOnly(it) }
+
+    // MongoDB
+    implementation("org.mongodb:mongodb-driver-sync:4.11.1")
+    implementation("org.mongodb:mongodb-driver-reactivestreams:4.11.1")
+    implementation("org.mongodb:mongodb-driver-kotlin-coroutine:4.11.1")
+    implementation("org.mongodb:bson-kotlinx:4.11.1")
 
 }
 
