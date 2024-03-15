@@ -58,11 +58,10 @@ class MongoControl(plugin: JavaPlugin, uri: String, database: String, providers:
     inline fun <reified T : Any> getCollection(name: String, collection: (MongoCollection<T>) -> MongoCollection<T>) : MongoCollection<T> {
 
         val mongoCollection = this.database.getCollection(name, T::class.java)
-
-        mongoCollection.withCodecRegistry(CodecRegistries.fromRegistries(
-            CodecRegistries.fromProviders(this.providers),
-            MongoClientSettings.getDefaultCodecRegistry()
-        ))
+            .withCodecRegistry(CodecRegistries.fromRegistries(
+                CodecRegistries.fromProviders(this.providers),
+                MongoClientSettings.getDefaultCodecRegistry()
+            ))
 
         return collection.invoke(mongoCollection)
     }
