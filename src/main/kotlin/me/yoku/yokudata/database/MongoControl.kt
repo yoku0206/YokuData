@@ -67,4 +67,7 @@ class MongoControl(plugin: JavaPlugin, uri: String, database: String, providers:
     }
 
     inline fun <reified T : Any> getCollection(name: String) : MongoCollection<T> { return getCollection<T>(name) { return it } }
+
+    fun registerProvider(vararg providers: CodecProvider) { this.providers.addAll(providers) }
+
 }

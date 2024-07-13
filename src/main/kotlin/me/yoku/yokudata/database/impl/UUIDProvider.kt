@@ -10,8 +10,7 @@ class UUIDProvider : CodecProvider {
 
     override fun <T : Any?> get(clazz: Class<T>?, registry: CodecRegistry?) : Codec<T>? {
 
-        if (clazz == UUID::class.java) { return UUIDCodec() as Codec<T>
-        }
+        if (clazz == UUID::class.java) { return UUIDCodec() as Codec<T> }
 
         return null
 
