@@ -16,7 +16,7 @@ val mcVersion = "1.19"
 val github = Properties().apply { load(FileInputStream(File("${System.getenv("USERPROFILE")}/.m2/", "github.properties"))) }
 
 group = "me.yoku"
-version = "3.3"
+version = "4.0"
 
 repositories {
 
@@ -26,27 +26,21 @@ repositories {
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
     maven("https://oss.sonatype.org/content/repositories/snapshots")
 
-}
+    maven {
+        url = uri("https://maven.pkg.github.com/yoku0206/YokuLib")
+        credentials {
+            username = github["gpr.user"] as String
+            password = github["gpr.key"] as String
+        }
+    }
 
-val centralDependcies = listOf(
-    // Kotlin
-    "org.jetbrains.kotlin:kotlin-stdlib:1.9.22",
-    "org.jetbrains.kotlin:kotlin-reflect:1.9.22",
-    "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1",
-    "org.jetbrains.kotlinx:kotlinx-serialization-core:1.6.3"
-)
+}
 
 dependencies {
 
     compileOnly(group = "org.spigotmc", name = "spigot-api", version = "1.19.4-R0.1-SNAPSHOT")
 
-    centralDependcies.forEach { compileOnly(it) }
-
-    // MongoDB
-    implementation("org.mongodb:mongodb-driver-sync:4.11.1")
-    implementation("org.mongodb:mongodb-driver-reactivestreams:4.11.1")
-    implementation("org.mongodb:mongodb-driver-kotlin-coroutine:4.11.1")
-    implementation("org.mongodb:bson-kotlinx:4.11.1")
+    compileOnly("me.yoku:yokulib:1.0")
 
 }
 
@@ -54,7 +48,7 @@ spigot {
 
     authors = listOf("Yoku")
     apiVersion = "1.13"
-    libraries = centralDependcies
+    excludeLibraries("*")
 
 }
 
