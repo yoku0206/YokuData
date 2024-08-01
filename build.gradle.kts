@@ -36,11 +36,26 @@ repositories {
 
 }
 
+val centralDependencies = listOf(
+    // Kotlin
+    "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.22",
+    "org.jetbrains.kotlin:kotlin-stdlib:1.9.22",
+    "org.jetbrains.kotlin:kotlin-reflect:1.9.22",
+    "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1",
+    "org.jetbrains.kotlinx:kotlinx-serialization-core:1.6.3"
+)
+
 dependencies {
 
     compileOnly(group = "org.spigotmc", name = "spigot-api", version = "1.19.4-R0.1-SNAPSHOT")
 
-    compileOnly("me.yoku:yokulib:1.0")
+    centralDependencies.forEach { compileOnly(it) }
+
+    // MongoDB
+    implementation("org.mongodb:mongodb-driver-sync:4.11.1")
+    implementation("org.mongodb:mongodb-driver-reactivestreams:4.11.1")
+    implementation("org.mongodb:mongodb-driver-kotlin-coroutine:4.11.1")
+    implementation("org.mongodb:bson-kotlinx:4.11.1")
 
 }
 
@@ -48,7 +63,7 @@ spigot {
 
     authors = listOf("Yoku")
     apiVersion = "1.13"
-    excludeLibraries("*")
+    libraries = centralDependencies
 
 }
 
